@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Testimonials • Echove Media</title>
+
+    <link rel="stylesheet" href="css/style.css" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+</head>
+
+<body>
+<header class="site-header">
+    <nav class="navbar container">
+        <a class="logo" href="index.html#home" aria-label="Echove Media Home">
+            <span class="logo-mark">E</span>
+            <span class="logo-text">Echove Media</span>
+        </a>
+
+        <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <ul class="nav-links" role="list">
+            <li><a href="index.html#home">Home</a></li>
+            <li><a href="index.html#brands">Brands</a></li>
+            <li><a href="index.html#services">Services</a></li>
+            <li><a href="index.html#campaigns">Work</a></li>
+            <li><a class="nav-cta" href="index.html#contact">Contact</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section class="section">
+    <div class="container">
+        <div class="section-head">
+            <h2>What Brands Say About Us</h2>
+            <p>Tap any testimonial to view it clearly.</p>
+        </div>
+
+        <!-- Criss-cross / staggered layout -->
+        <div class="t-masonry">
+            <button class="t-card card" data-full="images/testimonial0.jpg" aria-label="Open testimonial">
+                <img src="images/testimonial0.jpg" alt="Testimonial"/>
+            </button>
+            <button class="t-card card" data-full="images/testimonial1.jpg" aria-label="Open testimonial">
+                <img src="images/testimonial1.jpg" alt="Testimonial"/>
+            </button>
+            <button class="t-card card" data-full="images/testimonial2.jpg" aria-label="Open testimonial">
+                <img src="images/testimonial2.jpg" alt="Testimonial"/>
+            </button>
+            <button class="t-card card" data-full="images/testimonial6.jpg" aria-label="Open testimonial">
+                <img src="images/testimonial6.jpg" alt="Testimonial"/>
+            </button>
+            <button class="t-card card" data-full="images/testimonial5.jpg" aria-label="Open testimonial">
+                <img src="images/testimonial5.jpg" alt="Testimonial"/>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Modal -->
+<div class="modal" id="imgModal" aria-hidden="true">
+    <div class="modal-backdrop" data-close="true"></div>
+    <div class="modal-content card" role="dialog" aria-label="Testimonial preview">
+        <button class="modal-close" aria-label="Close" data-close="true">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <img id="modalImg" src="" alt="Full testimonial preview"/>
+    </div>
+</div>
+
+<footer class="site-footer">
+    <div class="container footer-inner">
+        <p>© <span id="year"></span> Echove Media. All rights reserved.</p>
+        <a href="index.html#home" class="to-top"><i class="fa-solid fa-arrow-left"></i> Back to Home</a>
+    </div>
+</footer>
+
+<script src="js/script.js"></script>
+</body>
+</html>

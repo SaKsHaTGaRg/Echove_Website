@@ -1,6 +1,10 @@
 // =========================================================
-// Echove Media – script.js (clean + responsive behaviors)
-// Copy-paste this whole file into: js/script.js
+// Echove Media – script.js
+// - Count animations on page load
+// - Mobile nav
+// - Fade-in sections
+// - Video play/pause behavior
+// - Testimonial modal (click to zoom)
 // =========================================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -12,10 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const toggle = document.querySelector(".nav-toggle");
     const links = document.querySelector(".nav-links");
 
-    const setExpanded = (val) => {
-        if (!toggle) return;
-        toggle.setAttribute("aria-expanded", String(val));
-    };
+    const setExpanded = (val) => toggle?.setAttribute("aria-expanded", String(val));
 
     if (toggle && links) {
         toggle.addEventListener("click", () => {
@@ -23,7 +24,6 @@ document.addEventListener("DOMContentLoaded", () => {
             setExpanded(links.classList.contains("open"));
         });
 
-        // Close menu on link click (mobile)
         links.querySelectorAll("a").forEach((a) => {
             a.addEventListener("click", () => {
                 links.classList.remove("open");
@@ -32,58 +32,76 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Close menu if user clicks outside (mobile)
     document.addEventListener("click", (e) => {
         if (!toggle || !links) return;
         if (!links.classList.contains("open")) return;
-
-        const clickedInsideNav = e.target.closest(".navbar");
-        if (!clickedInsideNav) {
+        if (!e.target.closest(".navbar")) {
             links.classList.remove("open");
             setExpanded(false);
         }
     });
 
-    // ----------------- Counters (stats + hero proof) -----------------
+    // ----------------- Count animation (runs on load) -----------------
     const counters = document.querySelectorAll(".counter[data-target]");
 
-    function formatNumber(num) {
-        return new Intl.NumberFormat().format(num);
-    }
+    const formatValue = (value, opts) => {
+        const { compact, decimals, prefix, suffix } = opts;
 
-    function runCounter(counter) {
-        const target = parseInt(counter.getAttribute("data-target"), 10) || 0;
-        const duration = 900; // ms
-        const start = performance.now();
-
-        function tick(now) {
-            const progress = Math.min((now - start) / duration, 1);
-            const value = Math.floor(progress * target);
-            counter.textContent = formatNumber(value);
-            if (progress < 1) requestAnimationFrame(tick);
-            else counter.textContent = formatNumber(target);
+        let out = "";
+        if (compact) {
+            out = new Intl.NumberFormat("en", {
+                notation: "compact",
+                maximumFractionDigits: decimals,
+            }).format(value);
+        } else {
+            out = new Intl.NumberFormat("en", {
+                maximumFractionDigits: decimals,
+                minimumFractionDigits: decimals,
+            }).format(value);
         }
 
+        return `${prefix}${out}${suffix}`;
+    };
+
+    const animateCounter = (el) => {
+        const targetRaw = el.getAttribute("data-target");
+        const target = Number(targetRaw);
+        if (Number.isNaN(target)) return;
+
+        const duration = Number(el.getAttribute("data-duration")) || 1000;
+        const decimals = Number(el.getAttribute("data-decimals")) || 0;
+        const compact = el.getAttribute("data-compact") === "1";
+        const prefix = el.getAttribute("data-prefix") || "";
+        const suffix = el.getAttribute("data-suffix") || "";
+
+        const start = performance.now();
+        const from = 0;
+
+        const tick = (now) => {
+            const t = Math.min((now - start) / duration, 1);
+            // smooth-ish easing
+            const eased = 1 - Math.pow(1 - t, 3);
+
+            const current = from + (target - from) * eased;
+
+            // keep decimals accurate
+            const rounded = decimals > 0 ? Number(current.toFixed(decimals)) : Math.floor(current);
+
+            el.textContent = formatValue(rounded, { compact, decimals, prefix, suffix });
+
+            if (t < 1) requestAnimationFrame(tick);
+            else el.textContent = formatValue(target, { compact, decimals, prefix, suffix });
+        };
+
         requestAnimationFrame(tick);
-    }
+    };
 
-    if (counters.length) {
-        const observed = new WeakSet();
-
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting && !observed.has(entry.target)) {
-                        observed.add(entry.target);
-                        runCounter(entry.target);
-                    }
-                });
-            },
-            { threshold: 0.5 }
-        );
-
-        counters.forEach((c) => observer.observe(c));
-    }
+    // Run all counters immediately on page load (as you asked)
+    counters.forEach((el) => {
+        // start from zero visually
+        el.textContent = "0";
+        animateCounter(el);
+    });
 
     // ----------------- Fade-up animations -----------------
     const animatedEls = document.querySelectorAll(".animate-fade-up");
@@ -94,31 +112,58 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (entry.isIntersecting) entry.target.classList.add("visible");
                 });
             },
-            { threshold: 0.15 }
+            { threshold: 0.12 }
         );
-
         animatedEls.forEach((el) => observerFade.observe(el));
     }
+
+    // ----------------- Brands expand/collapse -----------------
+    const brandsToggle = document.querySelector(".brands-toggle");
+    const brandsMarquee = document.getElementById("brandsMarquee");
+    const brandsGrid = document.getElementById("brandsGrid");
+
+    if (brandsToggle && brandsMarquee && brandsGrid) {
+        const setExpanded = (expanded) => {
+            brandsToggle.setAttribute("aria-expanded", String(expanded));
+            brandsToggle.textContent = expanded ? "Collapse" : "Expand me";
+
+            if (expanded) {
+                brandsMarquee.classList.add("paused");
+                brandsGrid.hidden = false;
+                brandsMarquee.hidden = true;
+            } else {
+                brandsGrid.hidden = true;
+                brandsMarquee.hidden = false;
+                brandsMarquee.classList.remove("paused");
+            }
+        };
+
+        setExpanded(false);
+
+        brandsToggle.addEventListener("click", () => {
+            const expanded = brandsToggle.getAttribute("aria-expanded") === "true";
+            setExpanded(!expanded);
+        });
+    }
+
 
     // ----------------- Campaign videos (tap to play; pause others) -----------------
     const videoBoxes = document.querySelectorAll("#campaigns .video-box");
     const allVideos = document.querySelectorAll("#campaigns video");
 
-    function pauseOthers(activeVideo) {
+    const pauseOthers = (activeVideo) => {
         allVideos.forEach((v) => {
             if (v !== activeVideo) {
                 v.pause();
-                const vb = v.closest(".video-box");
-                if (vb) vb.classList.remove("playing");
+                v.closest(".video-box")?.classList.remove("playing");
             }
         });
-    }
+    };
 
     videoBoxes.forEach((box) => {
         const video = box.querySelector("video");
         if (!video) return;
 
-        // Allow inline play on mobile
         video.setAttribute("playsinline", "");
         video.setAttribute("webkit-playsinline", "");
 
@@ -134,35 +179,43 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        video.addEventListener("ended", () => {
-            box.classList.remove("playing");
+        video.addEventListener("ended", () => box.classList.remove("playing"));
+    });
+
+    // ----------------- Testimonials modal (click to zoom) -----------------
+    const modal = document.getElementById("imgModal");
+    const modalImg = document.getElementById("modalImg");
+    const tCards = document.querySelectorAll(".t-card");
+
+    const openModal = (src) => {
+        if (!modal || !modalImg) return;
+        modalImg.src = src;
+        modal.classList.add("open");
+        modal.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+    };
+
+    const closeModal = () => {
+        if (!modal || !modalImg) return;
+        modal.classList.remove("open");
+        modal.setAttribute("aria-hidden", "true");
+        modalImg.src = "";
+        document.body.style.overflow = "";
+    };
+
+    tCards.forEach((btn) => {
+        btn.addEventListener("click", () => {
+            const full = btn.getAttribute("data-full");
+            if (full) openModal(full);
         });
     });
 
-    // ----------------- Testimonials carousel (auto-center middle) -----------------
-    const track = document.querySelector(".carousel-track");
-    if (track) {
-        const updateCarousel = () => {
-            const items = Array.from(track.children);
-            const total = items.length;
-            if (total === 0) return;
+    modal?.addEventListener("click", (e) => {
+        const close = e.target?.getAttribute?.("data-close");
+        if (close === "true") closeModal();
+    });
 
-            items.forEach((item) => item.classList.remove("active"));
-
-            // Rotate: move first to end
-            track.appendChild(items[0]);
-
-            const fresh = Array.from(track.children);
-            const middle = Math.floor(fresh.length / 2);
-
-            fresh[middle].classList.add("active");
-
-            const isMobile = window.matchMedia("(max-width: 980px)").matches;
-            const offset = isMobile ? 0 : -middle * (100 / 3);
-            track.style.transform = `translateX(${offset}%)`;
-        };
-
-        updateCarousel();
-        setInterval(updateCarousel, 4000);
-    }
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeModal();
+    });
 });
