@@ -68,7 +68,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const target = Number(targetRaw);
         if (Number.isNaN(target)) return;
 
-        const duration = Number(el.getAttribute("data-duration")) || 1000;
+        let duration = Number(el.getAttribute("data-duration")) || 5000;
+
+// big numbers feel too fast → give them more time
+        if (target >= 100000) duration = Math.max(duration, 5000);
+        if (target >= 1000000) duration = Math.max(duration, 5000);
         const decimals = Number(el.getAttribute("data-decimals")) || 0;
         const compact = el.getAttribute("data-compact") === "1";
         const prefix = el.getAttribute("data-prefix") || "";
@@ -167,6 +171,9 @@ document.addEventListener("DOMContentLoaded", () => {
         video.setAttribute("playsinline", "");
         video.setAttribute("webkit-playsinline", "");
 
+        video.muted = true;
+        video.setAttribute("muted", "");
+
         box.addEventListener("click", () => {
             pauseOthers(video);
 
@@ -182,40 +189,40 @@ document.addEventListener("DOMContentLoaded", () => {
         video.addEventListener("ended", () => box.classList.remove("playing"));
     });
 
-    // ----------------- Testimonials modal (click to zoom) -----------------
-    const modal = document.getElementById("imgModal");
-    const modalImg = document.getElementById("modalImg");
-    const tCards = document.querySelectorAll(".t-card");
-
-    const openModal = (src) => {
-        if (!modal || !modalImg) return;
-        modalImg.src = src;
-        modal.classList.add("open");
-        modal.setAttribute("aria-hidden", "false");
-        document.body.style.overflow = "hidden";
-    };
-
-    const closeModal = () => {
-        if (!modal || !modalImg) return;
-        modal.classList.remove("open");
-        modal.setAttribute("aria-hidden", "true");
-        modalImg.src = "";
-        document.body.style.overflow = "";
-    };
-
-    tCards.forEach((btn) => {
-        btn.addEventListener("click", () => {
-            const full = btn.getAttribute("data-full");
-            if (full) openModal(full);
-        });
-    });
-
-    modal?.addEventListener("click", (e) => {
-        const close = e.target?.getAttribute?.("data-close");
-        if (close === "true") closeModal();
-    });
-
-    document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") closeModal();
-    });
+    // // ----------------- Testimonials modal (click to zoom) -----------------
+    // const modal = document.getElementById("imgModal");
+    // const modalImg = document.getElementById("modalImg");
+    // const tCards = document.querySelectorAll(".t-card");
+    //
+    // const openModal = (src) => {
+    //     if (!modal || !modalImg) return;
+    //     modalImg.src = src;
+    //     modal.classList.add("open");
+    //     modal.setAttribute("aria-hidden", "false");
+    //     document.body.style.overflow = "hidden";
+    // };
+    //
+    // const closeModal = () => {
+    //     if (!modal || !modalImg) return;
+    //     modal.classList.remove("open");
+    //     modal.setAttribute("aria-hidden", "true");
+    //     modalImg.src = "";
+    //     document.body.style.overflow = "";
+    // };
+    //
+    // tCards.forEach((btn) => {
+    //     btn.addEventListener("click", () => {
+    //         const full = btn.getAttribute("data-full");
+    //         if (full) openModal(full);
+    //     });
+    // });
+    //
+    // modal?.addEventListener("click", (e) => {
+    //     const close = e.target?.getAttribute?.("data-close");
+    //     if (close === "true") closeModal();
+    // });
+    //
+    // document.addEventListener("keydown", (e) => {
+    //     if (e.key === "Escape") closeModal();
+    // });
 });
