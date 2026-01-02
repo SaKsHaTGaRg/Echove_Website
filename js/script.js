@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // ----------------- Count animation (runs on load) -----------------
-    const counters = document.querySelectorAll(".counter[data-target]");
+    const counters = document.querySelectorAll('.counter[data-target][data-animate="1"]');
 
     const formatValue = (value, opts) => {
         const { compact, decimals, prefix, suffix } = opts;
@@ -225,4 +225,121 @@ document.addEventListener("DOMContentLoaded", () => {
     // document.addEventListener("keydown", (e) => {
     //     if (e.key === "Escape") closeModal();
     // });
+
+    // ===== Lead modal (show after 10s, Creator/Brand switch) =====
+    // ===== Lead modal (show after 10s, Creator/Brand switch, Thank You hash) =====
+    (() => {
+        const modal = document.getElementById("leadModal");
+        if (!modal) return;
+
+        const closeEls = modal.querySelectorAll("[data-lead-close]");
+        const tabs = modal.querySelectorAll("[data-lead-tab]");
+        const creatorForm = modal.querySelector('[data-lead-form="creator"]');
+        const brandForm = modal.querySelector('[data-lead-form="brand"]');
+
+        const thankYouSection = document.getElementById("thank-you");
+        const thankYouLine = document.getElementById("thankYouLine");
+
+        const open = () => {
+            modal.classList.add("is-open");
+            modal.setAttribute("aria-hidden", "false");
+            document.documentElement.style.overflow = "hidden";
+        };
+
+        const close = () => {
+            modal.classList.remove("is-open");
+            modal.setAttribute("aria-hidden", "true");
+            document.documentElement.style.overflow = "";
+        };
+
+        const setTab = (key) => {
+            tabs.forEach(t => {
+                const active = t.dataset.leadTab === key;
+                t.classList.toggle("is-active", active);
+                t.setAttribute("aria-selected", active ? "true" : "false");
+            });
+
+            if (key === "creator") {
+                creatorForm.classList.remove("is-hidden");
+                brandForm.classList.add("is-hidden");
+            } else {
+                brandForm.classList.remove("is-hidden");
+                creatorForm.classList.add("is-hidden");
+            }
+        };
+
+        // If we landed here after submit, show Thank You section
+        const showThankYouIfNeeded = () => {
+            if (!thankYouSection) return;
+
+            const hash = window.location.hash || "";
+            if (!hash.startsWith("#thank-you")) return;
+
+            // Make it visible
+            thankYouSection.hidden = false;
+
+            // Optional: customize line based on type query in hash
+            // Example: #thank-you?type=creator
+            const typeMatch = hash.match(/type=(creator|brand)/i);
+            const type = typeMatch ? typeMatch[1].toLowerCase() : "";
+
+            if (thankYouLine) {
+                if (type === "creator") {
+                    thankYouLine.textContent = "Creator form received. We’ll reach out soon with next steps.";
+                } else if (type === "brand") {
+                    thankYouLine.textContent = "Brand inquiry received. We’ll reach out within 24–48 hours.";
+                } else {
+                    thankYouLine.textContent = "Your details have been received. We’ll reach out shortly.";
+                }
+            }
+
+            // Scroll into view smoothly
+            thankYouSection.scrollIntoView({ behavior: "smooth", block: "start" });
+
+            // Don't pop the modal if we're on thank-you
+            return true;
+        };
+
+        const onThankYou = showThankYouIfNeeded();
+
+        // Show after 10s (once per browser) unless we are on thank-you
+        const hasShown = localStorage.getItem("echove_lead_modal_shown");
+        if (!hasShown && !onThankYou) {
+            window.setTimeout(() => {
+                open();
+                localStorage.setItem("echove_lead_modal_shown", "1");
+            }, 5000);
+        }
+
+        closeEls.forEach(el => el.addEventListener("click", close));
+
+        // ESC close
+        window.addEventListener("keydown", (e) => {
+            if (e.key === "Escape" && modal.classList.contains("is-open")) close();
+        });
+
+        // hover = preview tab on desktop, click = lock
+        tabs.forEach(tab => {
+            tab.addEventListener("mouseenter", () => {
+                if (window.matchMedia("(hover: hover)").matches) setTab(tab.dataset.leadTab);
+            });
+            tab.addEventListener("click", () => setTab(tab.dataset.leadTab));
+        });
+
+        // Manual reopen button (ignores localStorage)
+        const manualOpenBtn = document.getElementById("openLeadModal");
+        if (manualOpenBtn) {
+            manualOpenBtn.addEventListener("click", () => {
+                modal.classList.add("is-open");
+                modal.setAttribute("aria-hidden", "false");
+                document.documentElement.style.overflow = "hidden";
+            });
+        }
+
+
+        // default tab
+        setTab("creator");
+    })();
+
+
 });
