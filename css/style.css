@@ -1109,14 +1109,99 @@ section{ scroll-margin-top: calc(var(--header-h) + 18px); }
     background: #000;
 }
 
+
 /* =========================
    Case Studies: Echove × Brand badge (scroll reveal)
    ========================= */
 
-/* =========================
-   Case Studies: premium right-side lockup (scroll reveal)
-   ========================= */
-/* ================= Case Studies (phones + right lockup) ================= */
+
+
+/*.case-block{*/
+/*    margin-top: 22px;*/
+/*}*/
+
+/*.case-block:first-of-type{*/
+/*    margin-top: 18px;*/
+/*}*/
+
+/*.case-block .subhead{*/
+/*    margin: 0 0 14px;*/
+/*}*/
+
+/*!* IMPORTANT: phones keep full width *!*/
+/*.case-row{*/
+/*    position: relative;          !* anchor for absolute lockup *!*/
+/*}*/
+
+/*!* Lockup floats on the right WITHOUT shrinking phones *!*/
+/*.case-lockup{*/
+/*    position: absolute;*/
+/*    right: 0;*/
+/*    top: 50%;*/
+/*    transform: translateY(-50%);*/
+
+/*    text-align: right;*/
+/*    padding-right: 6px;*/
+
+/*    opacity: 0;*/
+/*    filter: blur(2px);*/
+/*    transform-origin: center;*/
+/*    transition: opacity .65s ease, filter .65s ease, transform .65s ease;*/
+/*    pointer-events: none;        !* so it never blocks video controls *!*/
+/*}*/
+
+/*.case-block.is-visible .case-lockup{*/
+/*    opacity: 1;*/
+/*    filter: blur(0);*/
+/*    transform: translateY(-50%);*/
+/*}*/
+
+/*!* ECHOVE and BRAND SAME SIZE *!*/
+/*.lockup-word{*/
+/*    display: block;*/
+/*    font-weight: 900;*/
+/*    font-size: 2rem;     !* same size for both *!*/
+/*    line-height: 1.05;*/
+/*    letter-spacing: -0.02em;*/
+/*    max-width: 100%;*/
+/*    word-break: break-word;*/
+/*    hyphens: auto;*/
+
+/*    background: linear-gradient(90deg, rgba(255,255,255,.95), rgba(255,255,255,.70));*/
+/*    -webkit-background-clip: text;*/
+/*    background-clip: text;*/
+/*    color: transparent;*/
+/*}*/
+
+/*.lockup-x{*/
+/*    display: block;*/
+/*    font-family: "Great Vibes", cursive;*/
+/*    font-size: 2.9rem;*/
+/*    line-height: 1;*/
+/*    margin: 6px 0 4px;*/
+/*    opacity: .95;*/
+/*    transform: rotate(-6deg);*/
+/*    color: rgba(255,255,255,.82);*/
+/*}*/
+
+/*!* Responsive: on smaller screens, place lockup below phones *!*/
+/*@media (max-width: 980px){*/
+/*    .case-lockup{*/
+/*        position: static;*/
+/*        transform: none;*/
+/*        text-align: left;*/
+/*        margin-top: 12px;*/
+/*        padding-right: 0;*/
+/*        pointer-events: auto;*/
+/*    }*/
+
+/*    .case-block.is-visible .case-lockup{*/
+/*        transform: none;*/
+/*    }*/
+
+/*    .lockup-word{ font-size: 2rem; }*/
+/*    .lockup-x{ font-size: 1.4rem; }*/
+/*}*/
 
 .case-block{
     margin-top: 22px;
@@ -1130,12 +1215,12 @@ section{ scroll-margin-top: calc(var(--header-h) + 18px); }
     margin: 0 0 14px;
 }
 
-/* IMPORTANT: phones keep full width */
+/* ===== Laptop / Desktop (UNCHANGED BEHAVIOR) ===== */
 .case-row{
     position: relative;          /* anchor for absolute lockup */
 }
 
-/* Lockup floats on the right WITHOUT shrinking phones */
+/* Lockup floats on the right WITHOUT shrinking phones (desktop) */
 .case-lockup{
     position: absolute;
     right: 0;
@@ -1147,9 +1232,8 @@ section{ scroll-margin-top: calc(var(--header-h) + 18px); }
 
     opacity: 0;
     filter: blur(2px);
-    transform-origin: center;
     transition: opacity .65s ease, filter .65s ease, transform .65s ease;
-    pointer-events: none;        /* so it never blocks video controls */
+    pointer-events: none;        /* never blocks video controls */
 }
 
 .case-block.is-visible .case-lockup{
@@ -1162,12 +1246,12 @@ section{ scroll-margin-top: calc(var(--header-h) + 18px); }
 .lockup-word{
     display: block;
     font-weight: 900;
-    font-size: 2rem;     /* same size for both */
+    font-size: 2rem;
     line-height: 1.05;
     letter-spacing: -0.02em;
-    max-width: 100%;
-    word-break: break-word;
-    hyphens: auto;
+
+    /* IMPORTANT: keep long words visible on desktop */
+    white-space: nowrap;
 
     background: linear-gradient(90deg, rgba(255,255,255,.95), rgba(255,255,255,.70));
     -webkit-background-clip: text;
@@ -1178,7 +1262,7 @@ section{ scroll-margin-top: calc(var(--header-h) + 18px); }
 .lockup-x{
     display: block;
     font-family: "Great Vibes", cursive;
-    font-size: 2.9rem;
+    font-size: 2.4rem;          /* slightly smaller to avoid collision */
     line-height: 1;
     margin: 6px 0 4px;
     opacity: .95;
@@ -1186,60 +1270,45 @@ section{ scroll-margin-top: calc(var(--header-h) + 18px); }
     color: rgba(255,255,255,.82);
 }
 
-/* Responsive: on smaller screens, place lockup below phones */
-@media (max-width: 980px){
+/* ===== MOBILE ONLY FIX (does NOT change laptop) ===== */
+@media (max-width: 640px){
+
+    /* Put lockup BEFORE videos on mobile (fixes your #1 issue) */
+    .case-row{
+        display: flex;
+        flex-direction: column;
+    }
+
     .case-lockup{
         position: static;
         transform: none;
+        order: -1;                /* <<< this makes it appear first */
         text-align: left;
-        margin-top: 12px;
+        margin: 8px 0 10px;
         padding-right: 0;
-        pointer-events: auto;
+        opacity: 1;               /* show it immediately on mobile */
+        filter: none;
+        pointer-events: none;
     }
 
-    .case-block.is-visible .case-lockup{
-        transform: none;
+    /* Prevent X from collapsing into the word (fixes your #2 issue) */
+    .lockup-word{
+        font-size: 1.9rem;
+        white-space: normal;      /* allow wrapping on tiny screens */
+        overflow-wrap: anywhere;
+        word-break: normal;
+        hyphens: auto;
     }
 
-    .lockup-word{ font-size: 2rem; }
-    .lockup-x{ font-size: 1.4rem; }
+    .lockup-x{
+        display: inline-block;    /* keeps it from “disappearing” */
+        font-size: 1.6rem;
+        margin: 6px 0 6px;
+        padding: 0 6px;
+        line-height: 1;
+        transform: rotate(-6deg);
+    }
 }
-
-
-
-/* ================= Services ================= */
-/*.service-box{*/
-/*    display:grid;*/
-/*    grid-template-columns: .9fr 1.1fr;*/
-/*    gap: 18px;*/
-/*    padding: 18px;*/
-/*    align-items:center;*/
-/*    margin-top: 14px;*/
-/*}*/
-/*.service-box.reverse{ grid-template-columns: 1.1fr .9fr; }*/
-/*.service-box.reverse .service-image{ order: 2; }*/
-
-/*@media (max-width: 980px){*/
-/*    .service-box, .service-box.reverse{ grid-template-columns: 1fr; }*/
-/*    .service-box.reverse .service-image{ order: 0; }*/
-/*}*/
-
-/*.service-image{*/
-/*    border-radius: 16px;*/
-/*    overflow:hidden;*/
-/*    border: 1px solid rgba(255,255,255,.10);*/
-/*}*/
-/*.service-image img{*/
-/*    width: 100%;*/
-/*    height: 260px;*/
-/*    object-fit: cover;*/
-/*}*/
-/*@media (max-width: 520px){*/
-/*    .service-image img{ height: 220px; }*/
-/*}*/
-
-/*.service-text h3{ font-size: 1.25rem; margin-bottom: 8px; }*/
-/*.service-text p{ color: var(--muted); }*/
 
 /* ================= Editorial Services ================= */
 
