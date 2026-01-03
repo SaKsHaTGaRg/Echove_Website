@@ -31,17 +31,17 @@
         <li><a href="index.html#home">Home</a></li>
         <li><a href="index.html#brands">Brands</a></li>
         <li><a href="index.html#about">About</a></li>
-        <li><a class="active" href="services.html">Services</a></li>
+        <li><a href="index.html#services">Services</a></li>
         <li><a href="index.html#featured-campaigns">Work</a></li>
-        <li><a href="testimonials.html">Testimonials</a></li>
-        <li><a class="nav-cta" href="index.html#contact">Contact</a></li>
+        <li><a href="index.html#testimonials">Testimonials</a></li>
+        <li><a  href="index.html#contact">Contact</a></li>
     </ul>
 </nav>
 
 <!-- ================= Services Hero (centered) ================= -->
 <section class="services-hero section">
     <div class="container services-hero-center">
-        <span class="eyebrow">OUR SERVICES</span>
+        <span class="eyebrow" id="ss">OUR SERVICES</span>
 
         <h1>YOUR BRAND DESERVES THE BEST</h1>
 
@@ -154,6 +154,85 @@
         <a href="index.html#contact" class="btn primary">Book a discovery call</a>
     </div>
 </section>
+
+<!-- MEGA FOOTER (same as your site) -->
+<footer class="site-footer site-footer--mega">
+    <div class="container footer-grid">
+
+        <div class="footer-col footer-info">
+            <h3 class="footer-title">Information</h3>
+            <p class="footer-text">
+                Echove Media is a performance-first influencer marketing and content studio.
+                We help brands scale through creator-led campaigns, premium content production,
+                and reliable end-to-end execution.
+            </p>
+
+            <div class="footer-meta">
+                <p><strong>Email:</strong> <a href="mailto:Info@echovemedia.com">Info@echovemedia.com</a></p>
+                <p><strong>Instagram:</strong> <a href="https://www.instagram.com/echovemedia/" target="_blank" rel="noreferrer">@echovemedia</a></p>
+                <p><strong>WhatsApp:</strong> <a href="https://wa.me/918810320710" target="_blank" rel="noreferrer">+91 88103 20710</a></p>
+            </div>
+        </div>
+
+        <div class="footer-col footer-links">
+            <h3 class="footer-title">Quick Links</h3>
+            <ul class="footer-list">
+                <li><a href="index.html#home">Home</a></li>
+                <li><a href="index.html#brands">Brands</a></li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="index.html#featured-campaigns">Work</a></li>
+                <li><a href="case-studies.html">Case Studies</a></li>
+                <li><a href="index.html#testimonials">Testimonials</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+                <li><a href="privacy.html">Privacy Policy</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-col footer-contact">
+            <h3 class="footer-title">Working Hours</h3>
+
+            <div class="footer-badges">
+                <div class="footer-badge">
+                    <i class="fa-solid fa-calendar-days"></i>
+                    <span>Monday – Friday</span>
+                </div>
+                <div class="footer-badge">
+                    <i class="fa-solid fa-clock"></i>
+                    <span>10:00 AM – 7:00 PM IST</span>
+                </div>
+            </div>
+
+            <h3 class="footer-title" style="margin-top:18px;">Get In Touch</h3>
+
+            <div class="footer-badges">
+                <a class="footer-badge footer-badge--link" href="mailto:Info@echovemedia.com">
+                    <i class="fa-solid fa-envelope"></i>
+                    <span>Info@echovemedia.com</span>
+                </a>
+                <a class="footer-badge footer-badge--link" href="https://wa.me/918810320710" target="_blank" rel="noreferrer">
+                    <i class="fa-brands fa-whatsapp"></i>
+                    <span>+91 88103 20710</span>
+                </a>
+                <a class="footer-badge footer-badge--link" href="https://www.instagram.com/echovemedia/" target="_blank" rel="noreferrer">
+                    <i class="fa-brands fa-instagram"></i>
+                    <span>@echovemedia</span>
+                </a>
+                <a>
+                    <button type="button" class="footer-badge footer-badge--link" id="openLeadModal">
+                        Start a Collaboration
+                    </button>
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="container footer-bottom">
+        <p>© <span id="year"></span> Echove Media. All rights reserved.</p>
+        <a href="#ss" class="to-top"><i class="fa-solid fa-arrow-up"></i> Back to top</a>
+    </div>
+</footer>
 
 <script>
     const sections = [...document.querySelectorAll("[data-svc]")];
