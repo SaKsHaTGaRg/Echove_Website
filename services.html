@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Services — Echove</title>
+
+    <link rel="stylesheet" href="css/style.css" />
+
+    <!-- Font Awesome (needed for the hamburger icon) -->
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+</head>
+
+<body>
+
+<!-- NAVBAR (same as index, but links point back to index sections) -->
+<nav class="navbar container">
+    <a class="logo" href="index.html#home" aria-label="Echove Media Home">
+        <span class="logo-mark">E</span>
+        <span class="logo-text">Echove Media</span>
+    </a>
+
+    <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+
+    <ul class="nav-links" role="list">
+        <li><a href="index.html#home">Home</a></li>
+        <li><a href="index.html#brands">Brands</a></li>
+        <li><a href="index.html#about">About</a></li>
+        <li><a class="active" href="services.html">Services</a></li>
+        <li><a href="index.html#featured-campaigns">Work</a></li>
+        <li><a href="testimonials.html">Testimonials</a></li>
+        <li><a class="nav-cta" href="index.html#contact">Contact</a></li>
+    </ul>
+</nav>
+
+<!-- ================= Services Hero (centered) ================= -->
+<section class="services-hero section">
+    <div class="container services-hero-center">
+        <span class="eyebrow">OUR SERVICES</span>
+
+        <h1>YOUR BRAND DESERVES THE BEST</h1>
+
+        <p class="hero-sub">
+            Tap Into the Real Power of Influencer Marketing
+        </p>
+    </div>
+</section>
+
+
+<!-- ================= Main Services Content ================= -->
+<!-- ================= Main Services Content ================= -->
+<section class="section services-split" id="services">
+    <div class="container services-split-wrap">
+
+        <!-- LEFT: Circle navigation -->
+        <aside class="services-circles" aria-label="Services navigation">
+            <a class="circle-link is-active" href="#svc-1">Influencer Marketing</a>
+            <a class="circle-link" href="#svc-2">Campaign Management</a>
+            <a class="circle-link" href="#svc-3">Brand Strategy</a>
+            <a class="circle-link" href="#svc-4">Content Production</a>
+            <a class="circle-link" href="#svc-5">Talent Management</a>
+            <a class="circle-link" href="#svc-6">Artists & Repertoire</a>
+        </aside>
+
+        <!-- RIGHT: Services content -->
+        <div class="services-content-grid">
+
+            <header class="services-page-head">
+                <h2>Capabilities</h2>
+                <p>Pick what you need — or we’ll build a package around your goals.</p>
+            </header>
+
+            <article class="svc" id="svc-1" data-svc>
+                <span class="svc-num">01</span>
+                <h3>Influencer Marketing</h3>
+                <p>Creator partnerships with strong alignment, clear deliverables, and measurable outcomes.</p>
+                <ul>
+                    <li>Creator sourcing & vetting</li>
+                    <li>Briefs, contracts, deliverables</li>
+                    <li>Reporting & insights</li>
+                </ul>
+            </article>
+
+            <article class="svc" id="svc-2" data-svc>
+                <span class="svc-num">02</span>
+                <h3>Campaign Management</h3>
+                <p>End-to-end coordination so timelines, approvals, and content never fall through.</p>
+                <ul>
+                    <li>Workflow & approvals</li>
+                    <li>Creator comms</li>
+                    <li>Scheduling & deliverables</li>
+                </ul>
+            </article>
+
+            <article class="svc" id="svc-3" data-svc>
+                <span class="svc-num">03</span>
+                <h3>Brand Strategy</h3>
+                <p>Positioning, tone, and creative direction built for modern social platforms.</p>
+                <ul>
+                    <li>Messaging & positioning</li>
+                    <li>Content pillars</li>
+                    <li>Campaign concepts</li>
+                </ul>
+            </article>
+
+            <article class="svc" id="svc-4" data-svc>
+                <span class="svc-num">04</span>
+                <h3>Content Production</h3>
+                <p>Scroll-stopping content that looks native and converts — organic and paid.</p>
+                <ul>
+                    <li>UGC & short-form video</li>
+                    <li>Creative testing</li>
+                    <li>Editing & optimization</li>
+                </ul>
+            </article>
+
+            <article class="svc" id="svc-5" data-svc>
+                <span class="svc-num">05</span>
+                <h3>Talent Management</h3>
+                <p>Support for creators with opportunities, negotiations, and long-term growth.</p>
+                <ul>
+                    <li>Brand deals</li>
+                    <li>Rate negotiation</li>
+                    <li>Partnership strategy</li>
+                </ul>
+            </article>
+
+            <article class="svc" id="svc-6" data-svc>
+                <span class="svc-num">06</span>
+                <h3>Artists & Repertoire</h3>
+                <p>Discovery and direction for talent — shaping content, identity, and rollout strategy.</p>
+                <ul>
+                    <li>Creative direction</li>
+                    <li>Brand alignment</li>
+                    <li>Launch planning</li>
+                </ul>
+            </article>
+
+        </div>
+    </div>
+</section>
+
+
+
+<!-- ================= CTA ================= -->
+<section class="services-cta section">
+    <div class="container">
+        <h2>Let’s build something that actually performs.</h2>
+        <a href="index.html#contact" class="btn primary">Book a discovery call</a>
+    </div>
+</section>
+
+<script>
+    const sections = [...document.querySelectorAll("[data-svc]")];
+    const links = [...document.querySelectorAll(".circle-link")];
+
+    const linkFor = (id) => links.find(a => a.getAttribute("href") === "#" + id);
+
+    const obs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+
+            links.forEach(a => a.classList.remove("is-active"));
+            const active = linkFor(entry.target.id);
+            if (active) active.classList.add("is-active");
+        });
+    }, { threshold: 0.55 });
+
+    sections.forEach(s => obs.observe(s));
+</script>
+
+
+</body>
+</html>
